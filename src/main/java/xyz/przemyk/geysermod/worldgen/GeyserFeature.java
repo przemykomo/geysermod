@@ -20,6 +20,7 @@ public class GeyserFeature extends Feature<NoFeatureConfig> {
         super(configFactoryIn);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean place(IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 
