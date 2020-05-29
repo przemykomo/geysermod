@@ -7,18 +7,13 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.RegistryObject;
@@ -51,11 +46,12 @@ public class Registration {
     }
 
     private static void addFeatures() {
-        Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, GEYSER_FEATURE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+        Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, Biome.createDecoratedFeature(NETHER_GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.HELL_FIRE, new FrequencyConfig(10)));
 
-        BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().getDefaultState()), new SimpleBlockPlacer())).tries(10).func_227317_b_().build();
-        Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, NETHER_GEYSER_FEATURE.get().withConfiguration(NETHER_GEYSER_CONFIG).withPlacement(Placement.HELL_FIRE.configure(new FrequencyConfig(10))));
-        DeferredWorkQueue.runLater(() -> Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG)));
+//        BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().getDefaultState()), new SimpleBlockPlacer())).tries(10).func_227317_b_().build();
+//        Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, NETHER_GEYSER_FEATURE.get().withConfiguration(NETHER_GEYSER_CONFIG).withPlacement(Placement.HELL_FIRE.configure(new FrequencyConfig(10))));
+//        DeferredWorkQueue.runLater(() -> Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG)));
     }
 
     public static final RegistryObject<GeyserBlock> GEYSER_BLOCK = BLOCKS.register("geyser", GeyserBlock::new);
@@ -72,5 +68,5 @@ public class Registration {
     public static final RegistryObject<BlockItem> NETHER_GEYSER_ITEM = ITEMS.register("nether_geyser", () -> new BlockItem(NETHER_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
 
     public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoFeatureConfig::deserialize));
-    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(BlockClusterFeatureConfig::deserialize));
+    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(NoFeatureConfig::deserialize));
 }
