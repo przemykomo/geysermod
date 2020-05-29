@@ -21,7 +21,11 @@ public class GeyserBlock extends Block {
         super(Properties.from(Blocks.STONE).tickRandomly());
     }
 
-    AxisAlignedBB hurtEntitiesAABB = new AxisAlignedBB(0, 0, 0, 1, 3, 1);
+    public GeyserBlock(Properties properties) {
+        super(properties.tickRandomly());
+    }
+
+    protected AxisAlignedBB hurtEntitiesAABB = new AxisAlignedBB(0, 0, 0, 1, 3, 1);
 
     @SuppressWarnings("deprecation")
     @Override
