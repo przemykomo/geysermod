@@ -10,7 +10,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import xyz.przemyk.geysermod.Registration;
 
 public class RedstoneGeyserBlock extends Block implements IGeyser {
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;

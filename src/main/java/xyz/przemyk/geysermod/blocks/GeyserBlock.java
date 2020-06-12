@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
@@ -19,7 +20,7 @@ public class GeyserBlock extends Block implements IGeyser {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        shoot(worldIn, pos, hurtEntitiesAABB);
+    public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
+        shoot((ServerWorld) worldIn, pos, hurtEntitiesAABB);
     }
 }

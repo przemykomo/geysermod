@@ -50,10 +50,6 @@ public class Registration {
     private static void addFeatures() {
         Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
         Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, Biome.createDecoratedFeature(NETHER_GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.HELL_FIRE, new FrequencyConfig(10)));
-
-//        BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().getDefaultState()), new SimpleBlockPlacer())).tries(10).func_227317_b_().build();
-//        Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, NETHER_GEYSER_FEATURE.get().withConfiguration(NETHER_GEYSER_CONFIG).withPlacement(Placement.HELL_FIRE.configure(new FrequencyConfig(10))));
-//        DeferredWorkQueue.runLater(() -> Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(GEYSER_FEATURE.get(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG)));
     }
 
     public static final RegistryObject<GeyserBlock> GEYSER_BLOCK = BLOCKS.register("geyser", GeyserBlock::new);
