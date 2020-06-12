@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "X",
+        "#"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:piston"
+        },
+        "X": [
+            {
+                "item": "geysermod:nether_geyser"
+            }
+        ]
+    },
+    "result": {
+        "item": "geysermod:redstone_nether_geyser",
+        "count": 1
+    }
+}
