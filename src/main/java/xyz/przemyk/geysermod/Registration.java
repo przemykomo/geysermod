@@ -22,6 +22,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.przemyk.geysermod.blocks.GeyserBlock;
 import xyz.przemyk.geysermod.blocks.NetherGeyserBlock;
+import xyz.przemyk.geysermod.blocks.RedstoneGeyserBlock;
+import xyz.przemyk.geysermod.blocks.RedstoneNetherGeyserBlock;
 import xyz.przemyk.geysermod.worldgen.GeyserFeature;
 import xyz.przemyk.geysermod.worldgen.NetherGeyserFeature;
 
@@ -56,6 +58,8 @@ public class Registration {
 
     public static final RegistryObject<GeyserBlock> GEYSER_BLOCK = BLOCKS.register("geyser", GeyserBlock::new);
     public static final RegistryObject<NetherGeyserBlock> NETHER_GEYSER_BLOCK = BLOCKS.register("nether_geyser", NetherGeyserBlock::new);
+    public static final RegistryObject<RedstoneGeyserBlock> REDSTONE_GEYSER_BLOCK = BLOCKS.register("redstone_geyser", RedstoneGeyserBlock::new);
+    public static final RegistryObject<RedstoneNetherGeyserBlock> REDSTONE_NETHER_GEYSER_BLOCK = BLOCKS.register("redstone_nether_geyser", RedstoneNetherGeyserBlock::new);
 
     public static final ItemGroup GEYSER_ITEM_GROUP = new ItemGroup(ItemGroup.GROUPS.length, "geysermod") {
         @Override
@@ -66,6 +70,8 @@ public class Registration {
 
     public static final RegistryObject<BlockItem> GEYSER_ITEM = ITEMS.register("geyser", () -> new BlockItem(GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
     public static final RegistryObject<BlockItem> NETHER_GEYSER_ITEM = ITEMS.register("nether_geyser", () -> new BlockItem(NETHER_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
+    public static final RegistryObject<BlockItem> REDSTONE_GEYSER_ITEM = ITEMS.register("redstone_geyser", () -> new BlockItem(REDSTONE_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
+    public static final RegistryObject<BlockItem> REDSTONE_NETHER_GEYSER_ITEM = ITEMS.register("redstone_nether_geyser", () -> new BlockItem(REDSTONE_NETHER_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
 
     public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoFeatureConfig::deserialize));
     public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(NoFeatureConfig::deserialize));
