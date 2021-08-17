@@ -1,15 +1,13 @@
 package xyz.przemyk.geysermod.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class NetherGeyserBlock extends Block implements INetherGeyser {
 
@@ -17,11 +15,11 @@ public class NetherGeyserBlock extends Block implements INetherGeyser {
         super(Properties.copy(Blocks.NETHERRACK).randomTicks());
     }
 
-    protected AxisAlignedBB hurtEntitiesAABB = new AxisAlignedBB(0, 0, 0, 1, 3, 1);
+    protected AABB hurtEntitiesAABB = new AABB(0, 0, 0, 1, 3, 1);
 
     @SuppressWarnings("deprecation")
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
         shoot(worldIn, pos, hurtEntitiesAABB);
     }
 }

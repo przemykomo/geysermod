@@ -1,30 +1,32 @@
 package xyz.przemyk.geysermod.worldgen;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import xyz.przemyk.geysermod.Registration;
 
 import java.util.Random;
 
-public class GeyserFeature extends Feature<NoFeatureConfig> {
+public class GeyserFeature extends Feature<NoneFeatureConfiguration> {
 
-    public GeyserFeature(Codec<NoFeatureConfig> codec) {
+    public GeyserFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> ctx) {
+        Random rand = ctx.random();
+        WorldGenLevel worldIn = ctx.level();
+        BlockPos pos = ctx.origin();
         if (rand.nextInt(10) > 7) {
             int x = pos.getX() + rand.nextInt(15);
             int z = pos.getZ() + rand.nextInt(15);
-            BlockPos blockPos = new BlockPos(x, worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, x, z) - 1, z);
+            BlockPos blockPos = new BlockPos(x, worldIn.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1, z);
 
             if (worldIn.getBlockState(blockPos).getBlock() == Blocks.STONE) {
                 worldIn.setBlock(blockPos, Registration.GEYSER_BLOCK.get().defaultBlockState(), 2);

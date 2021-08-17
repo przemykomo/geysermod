@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "geysermod:geyser",
+        "geysermod:nether_geyser",
+        "geysermod:redstone_geyser",
+        "geysermod:redstone_nether_geyser"
+    ]
+}

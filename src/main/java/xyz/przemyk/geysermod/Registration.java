@@ -1,24 +1,29 @@
 package xyz.przemyk.geysermod;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.Placement;
+import com.google.common.collect.ImmutableSet;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.Features;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.blockplacers.SimpleBlockPlacer;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import xyz.przemyk.geysermod.blocks.GeyserBlock;
@@ -40,7 +45,7 @@ public class Registration {
     public static final RegistryObject<RedstoneGeyserBlock> REDSTONE_GEYSER_BLOCK = BLOCKS.register("redstone_geyser", RedstoneGeyserBlock::new);
     public static final RegistryObject<RedstoneNetherGeyserBlock> REDSTONE_NETHER_GEYSER_BLOCK = BLOCKS.register("redstone_nether_geyser", RedstoneNetherGeyserBlock::new);
 
-    public static final ItemGroup GEYSER_ITEM_GROUP = new ItemGroup(ItemGroup.TABS.length, GeyserMod.MODID) {
+    public static final CreativeModeTab GEYSER_ITEM_GROUP = new CreativeModeTab(CreativeModeTab.TABS.length, GeyserMod.MODID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(GEYSER_ITEM.get());
@@ -52,8 +57,8 @@ public class Registration {
     public static final RegistryObject<BlockItem> REDSTONE_GEYSER_ITEM = ITEMS.register("redstone_geyser", () -> new BlockItem(REDSTONE_GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
     public static final RegistryObject<BlockItem> REDSTONE_NETHER_GEYSER_ITEM = ITEMS.register("redstone_nether_geyser", () -> new BlockItem(REDSTONE_NETHER_GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
 
-    public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoFeatureConfig.CODEC));
-    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(BlockClusterFeatureConfig.CODEC));
+    public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(RandomPatchConfiguration.CODEC));
 
     public static ConfiguredFeature<?, ?> GEYSER_CONFIGURED_FEATURE;
     public static ConfiguredFeature<?, ?> NETHER_GEYSER_CONFIGURED_FEATURE;
@@ -70,19 +75,19 @@ public class Registration {
 
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "geyser"), GEYSER_CONFIGURED_FEATURE = GEYSER_FEATURE.get().configured(IFeatureConfig.NONE));
+            BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "geyser"), GEYSER_CONFIGURED_FEATURE = GEYSER_FEATURE.get().configured(FeatureConfiguration.NONE));
 
-            BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), new SimpleBlockPlacer())).tries(10).noProjection().build();
-            WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "nether_geyser"), NETHER_GEYSER_CONFIGURED_FEATURE = NETHER_GEYSER_FEATURE.get().configured(NETHER_GEYSER_CONFIG).decorated(Placement.FIRE.configured(new FeatureSpreadConfig(10))));
+            RandomPatchConfiguration NETHER_GEYSER_CONFIG = (new RandomPatchConfiguration.GrassConfigurationBuilder(new SimpleStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), new SimpleBlockPlacer())).tries(10).noProjection().build();
+            BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "nether_geyser"), NETHER_GEYSER_CONFIGURED_FEATURE = NETHER_GEYSER_FEATURE.get().configured(new RandomPatchConfiguration.GrassConfigurationBuilder(new SimpleStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE).tries(64).whitelist(ImmutableSet.of(NETHER_GEYSER_BLOCK.get())).noProjection().build()).decorated(Features.Decorators.FIRE));
         });
     }
 
     private static void addFeatures(BiomeLoadingEvent event) {
-        Biome.Category category = event.getCategory();
-        if (category == Biome.Category.EXTREME_HILLS) {
-            event.getGeneration().getFeatures(GenerationStage.Decoration.LOCAL_MODIFICATIONS).add(() -> GEYSER_CONFIGURED_FEATURE);
-        } else if (category == Biome.Category.NETHER) {
-            event.getGeneration().getFeatures(GenerationStage.Decoration.UNDERGROUND_DECORATION).add(() -> NETHER_GEYSER_CONFIGURED_FEATURE);
+        Biome.BiomeCategory category = event.getCategory();
+        if (category == Biome.BiomeCategory.EXTREME_HILLS) {
+            event.getGeneration().getFeatures(GenerationStep.Decoration.LOCAL_MODIFICATIONS).add(() -> GEYSER_CONFIGURED_FEATURE);
+        } else if (category == Biome.BiomeCategory.NETHER) {
+            event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_DECORATION).add(() -> NETHER_GEYSER_CONFIGURED_FEATURE);
         }
     }
 }
