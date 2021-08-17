@@ -10,11 +10,5 @@ public class GeyserMod {
 
     public GeyserMod() {
         Registration.init();
-
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-    }
-
-    public void commonSetup(FMLCommonSetupEvent event) {
-        Registration.commonSetup();
     }
 }

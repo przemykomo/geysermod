@@ -5,20 +5,19 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,9 +31,32 @@ import xyz.przemyk.geysermod.worldgen.NetherGeyserFeature;
 @SuppressWarnings("unused")
 public class Registration {
 
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, GeyserMod.MODID);
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, GeyserMod.MODID);
-    public static final DeferredRegister<Feature<?>> FEATURES = new DeferredRegister<>(ForgeRegistries.FEATURES, GeyserMod.MODID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, GeyserMod.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GeyserMod.MODID);
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, GeyserMod.MODID);
+
+    public static final RegistryObject<GeyserBlock> GEYSER_BLOCK = BLOCKS.register("geyser", GeyserBlock::new);
+    public static final RegistryObject<NetherGeyserBlock> NETHER_GEYSER_BLOCK = BLOCKS.register("nether_geyser", NetherGeyserBlock::new);
+    public static final RegistryObject<RedstoneGeyserBlock> REDSTONE_GEYSER_BLOCK = BLOCKS.register("redstone_geyser", RedstoneGeyserBlock::new);
+    public static final RegistryObject<RedstoneNetherGeyserBlock> REDSTONE_NETHER_GEYSER_BLOCK = BLOCKS.register("redstone_nether_geyser", RedstoneNetherGeyserBlock::new);
+
+    public static final ItemGroup GEYSER_ITEM_GROUP = new ItemGroup(ItemGroup.TABS.length, GeyserMod.MODID) {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(GEYSER_ITEM.get());
+        }
+    };
+
+    public static final RegistryObject<BlockItem> GEYSER_ITEM = ITEMS.register("geyser", () -> new BlockItem(GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
+    public static final RegistryObject<BlockItem> NETHER_GEYSER_ITEM = ITEMS.register("nether_geyser", () -> new BlockItem(NETHER_GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
+    public static final RegistryObject<BlockItem> REDSTONE_GEYSER_ITEM = ITEMS.register("redstone_geyser", () -> new BlockItem(REDSTONE_GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
+    public static final RegistryObject<BlockItem> REDSTONE_NETHER_GEYSER_ITEM = ITEMS.register("redstone_nether_geyser", () -> new BlockItem(REDSTONE_NETHER_GEYSER_BLOCK.get(), new Item.Properties().tab(GEYSER_ITEM_GROUP)));
+
+    public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoFeatureConfig.CODEC));
+    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(BlockClusterFeatureConfig.CODEC));
+
+    public static ConfiguredFeature<?, ?> GEYSER_CONFIGURED_FEATURE;
+    public static ConfiguredFeature<?, ?> NETHER_GEYSER_CONFIGURED_FEATURE;
 
     public static void init() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -42,37 +64,25 @@ public class Registration {
         BLOCKS.register(eventBus);
         ITEMS.register(eventBus);
         FEATURES.register(eventBus);
+        eventBus.addListener(Registration::commonSetup);
+        MinecraftForge.EVENT_BUS.addListener(Registration::addFeatures);
     }
 
-    @SuppressWarnings("deprecation")
-    public static void commonSetup() {
-        DeferredWorkQueue.runLater(Registration::addFeatures);
+    private static void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "geyser"), GEYSER_CONFIGURED_FEATURE = GEYSER_FEATURE.get().configured(IFeatureConfig.NONE));
+
+            BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), new SimpleBlockPlacer())).tries(10).noProjection().build();
+            WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "nether_geyser"), NETHER_GEYSER_CONFIGURED_FEATURE = NETHER_GEYSER_FEATURE.get().configured(NETHER_GEYSER_CONFIG).decorated(Placement.FIRE.configured(new FeatureSpreadConfig(10))));
+        });
     }
 
-    private static void addFeatures() {
-        Biomes.MOUNTAINS.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, GEYSER_FEATURE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-
-        BlockClusterFeatureConfig NETHER_GEYSER_CONFIG = (new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(NETHER_GEYSER_BLOCK.get().getDefaultState()), new SimpleBlockPlacer())).tries(10).func_227317_b_().build();
-        Biomes.NETHER.addFeature(GenerationStage.Decoration.UNDERGROUND_DECORATION, NETHER_GEYSER_FEATURE.get().withConfiguration(NETHER_GEYSER_CONFIG).withPlacement(Placement.HELL_FIRE.configure(new FrequencyConfig(10))));
-    }
-
-    public static final RegistryObject<GeyserBlock> GEYSER_BLOCK = BLOCKS.register("geyser", GeyserBlock::new);
-    public static final RegistryObject<NetherGeyserBlock> NETHER_GEYSER_BLOCK = BLOCKS.register("nether_geyser", NetherGeyserBlock::new);
-    public static final RegistryObject<RedstoneGeyserBlock> REDSTONE_GEYSER_BLOCK = BLOCKS.register("redstone_geyser", RedstoneGeyserBlock::new);
-    public static final RegistryObject<RedstoneNetherGeyserBlock> REDSTONE_NETHER_GEYSER_BLOCK = BLOCKS.register("redstone_nether_geyser", RedstoneNetherGeyserBlock::new);
-
-    public static final ItemGroup GEYSER_ITEM_GROUP = new ItemGroup(ItemGroup.GROUPS.length, "geysermod") {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(GEYSER_ITEM.get());
+    private static void addFeatures(BiomeLoadingEvent event) {
+        Biome.Category category = event.getCategory();
+        if (category == Biome.Category.EXTREME_HILLS) {
+            event.getGeneration().getFeatures(GenerationStage.Decoration.LOCAL_MODIFICATIONS).add(() -> GEYSER_CONFIGURED_FEATURE);
+        } else if (category == Biome.Category.NETHER) {
+            event.getGeneration().getFeatures(GenerationStage.Decoration.UNDERGROUND_DECORATION).add(() -> NETHER_GEYSER_CONFIGURED_FEATURE);
         }
-    };
-
-    public static final RegistryObject<BlockItem> GEYSER_ITEM = ITEMS.register("geyser", () -> new BlockItem(GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
-    public static final RegistryObject<BlockItem> NETHER_GEYSER_ITEM = ITEMS.register("nether_geyser", () -> new BlockItem(NETHER_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
-    public static final RegistryObject<BlockItem> REDSTONE_GEYSER_ITEM = ITEMS.register("redstone_geyser", () -> new BlockItem(REDSTONE_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
-    public static final RegistryObject<BlockItem> REDSTONE_NETHER_GEYSER_ITEM = ITEMS.register("redstone_nether_geyser", () -> new BlockItem(REDSTONE_NETHER_GEYSER_BLOCK.get(), new Item.Properties().group(GEYSER_ITEM_GROUP)));
-
-    public static final RegistryObject<GeyserFeature> GEYSER_FEATURE = FEATURES.register("geyser_feature", () -> new GeyserFeature(NoFeatureConfig::deserialize));
-    public static final RegistryObject<NetherGeyserFeature> NETHER_GEYSER_FEATURE = FEATURES.register("nether_geyser_feature", () -> new NetherGeyserFeature(BlockClusterFeatureConfig::deserialize));
+    }
 }
