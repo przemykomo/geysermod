@@ -9,60 +9,44 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraftforge.common.Tags;
 
 import java.util.Random;
 
 public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
 
-    public NetherGeyserFeature(Codec<RandomPatchConfiguration> codec) {
-        super(codec);
+    public NetherGeyserFeature(Codec<RandomPatchConfiguration> p_66605_) {
+        super(p_66605_);
     }
 
-    @Override
-    public boolean place(FeaturePlaceContext<RandomPatchConfiguration> ctx) {
-//        Random rand = ctx.random();
-//        WorldGenLevel worldIn = ctx.level();
-//        RandomPatchConfiguration config = ctx.config();
-//        BlockPos pos = ctx.origin();
-//        int i = 0;
-//        BlockPos.MutableBlockPos mutableBlockpos = new BlockPos.MutableBlockPos();
-//
-//        for (int j = 0; j < 20; ++j) {
-//            mutableBlockpos.set(pos).move(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(10) - rand.nextInt(10), rand.nextInt(10) - rand.nextInt(10));
-//            if ((worldIn.isEmptyBlock(mutableBlockpos) && worldIn.getBlockState(mutableBlockpos.below()).getBlock() == Blocks.NETHERRACK)) {
-//                System.out.println(mutableBlockpos);
-//                worldIn.setBlock(mutableBlockpos.below(), Registration.NETHER_GEYSER_BLOCK.get().defaultBlockState(), 2);
-//                ++i;
-//            }
-//        }
-//
-//        return i > 0;
-
-        RandomPatchConfiguration config = ctx.config();
-        Random random = ctx.random();
-        BlockPos origin = ctx.origin();
-        WorldGenLevel level = ctx.level();
-        BlockState state = config.stateProvider.getState(random, origin);
-        BlockPos blockPos;
-        if (config.project) {
-            blockPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, origin);
+    public boolean place(FeaturePlaceContext<RandomPatchConfiguration> p_160210_) {
+        RandomPatchConfiguration randompatchconfiguration = p_160210_.config();
+        Random random = p_160210_.random();
+        BlockPos blockpos = p_160210_.origin();
+        WorldGenLevel worldgenlevel = p_160210_.level();
+        BlockState blockstate = randompatchconfiguration.stateProvider.getState(random, blockpos);
+        BlockPos blockpos1;
+        if (randompatchconfiguration.project) {
+            blockpos1 = worldgenlevel.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, blockpos);
         } else {
-            blockPos = origin;
+            blockpos1 = blockpos;
         }
 
-        int success = 0;
-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        int i = 0;
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
-        for(int var10 = 0; var10 < config.tries; ++var10) {
-            mutableBlockPos.setWithOffset(blockPos, random.nextInt(config.xspread + 1) - random.nextInt(config.xspread + 1), random.nextInt(config.yspread + 1) - random.nextInt(config.yspread + 1), random.nextInt(config.zspread + 1) - random.nextInt(config.zspread + 1));
-            BlockPos below = mutableBlockPos.below();
-            BlockState belowBlockState = level.getBlockState(below);
-            if ((level.isEmptyBlock(mutableBlockPos) || config.canReplace && level.getBlockState(mutableBlockPos).getMaterial().isReplaceable()) && state.canSurvive(level, mutableBlockPos) && (config.whitelist.isEmpty() || config.whitelist.contains(belowBlockState.getBlock())) && !config.blacklist.contains(belowBlockState) && (!config.needWater || level.getFluidState(below.west()).is(FluidTags.WATER) || level.getFluidState(below.east()).is(FluidTags.WATER) || level.getFluidState(below.north()).is(FluidTags.WATER) || level.getFluidState(below.south()).is(FluidTags.WATER))) {
-                config.blockPlacer.place(level, below, state, random);
-                ++success;
+        for(int j = 0; j < randompatchconfiguration.tries; ++j) {
+            blockpos$mutableblockpos.setWithOffset(blockpos1, random.nextInt(randompatchconfiguration.xspread + 1) - random.nextInt(randompatchconfiguration.xspread + 1), random.nextInt(randompatchconfiguration.yspread + 1) - random.nextInt(randompatchconfiguration.yspread + 1), random.nextInt(randompatchconfiguration.zspread + 1) - random.nextInt(randompatchconfiguration.zspread + 1));
+            BlockPos blockpos2 = blockpos$mutableblockpos.below();
+            BlockState blockstate1 = worldgenlevel.getBlockState(blockpos2);
+            if ((worldgenlevel.isEmptyBlock(blockpos$mutableblockpos) || randompatchconfiguration.canReplace && worldgenlevel.getBlockState(blockpos$mutableblockpos).getMaterial().isReplaceable()) && blockstate.canSurvive(worldgenlevel, blockpos$mutableblockpos) && (randompatchconfiguration.whitelist.isEmpty() || randompatchconfiguration.whitelist.contains(blockstate1.getBlock())) && !randompatchconfiguration.blacklist.contains(blockstate1) && (!randompatchconfiguration.needWater || worldgenlevel.getFluidState(blockpos2.west()).is(FluidTags.WATER) || worldgenlevel.getFluidState(blockpos2.east()).is(FluidTags.WATER) || worldgenlevel.getFluidState(blockpos2.north()).is(FluidTags.WATER) || worldgenlevel.getFluidState(blockpos2.south()).is(FluidTags.WATER))) {
+                if (blockstate1.is(Tags.Blocks.NETHERRACK)) {
+                    randompatchconfiguration.blockPlacer.place(worldgenlevel, blockpos2, blockstate, random);
+                    ++i;
+                }
             }
         }
 
-        return success > 0;
+        return i > 0;
     }
 }

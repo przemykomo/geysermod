@@ -1,6 +1,5 @@
 package xyz.przemyk.geysermod;
 
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.Features;
 import net.minecraft.resources.ResourceLocation;
@@ -76,9 +75,7 @@ public class Registration {
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "geyser"), GEYSER_CONFIGURED_FEATURE = GEYSER_FEATURE.get().configured(FeatureConfiguration.NONE));
-
-            RandomPatchConfiguration NETHER_GEYSER_CONFIG = (new RandomPatchConfiguration.GrassConfigurationBuilder(new SimpleStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), new SimpleBlockPlacer())).tries(10).noProjection().build();
-            BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "nether_geyser"), NETHER_GEYSER_CONFIGURED_FEATURE = NETHER_GEYSER_FEATURE.get().configured(new RandomPatchConfiguration.GrassConfigurationBuilder(new SimpleStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE).tries(64).whitelist(ImmutableSet.of(NETHER_GEYSER_BLOCK.get())).noProjection().build()).decorated(Features.Decorators.FIRE));
+            BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(GeyserMod.MODID, "patch_test"), NETHER_GEYSER_CONFIGURED_FEATURE = NETHER_GEYSER_FEATURE.get().configured((new RandomPatchConfiguration.GrassConfigurationBuilder(new SimpleStateProvider(NETHER_GEYSER_BLOCK.get().defaultBlockState()), SimpleBlockPlacer.INSTANCE)).tries(64).noProjection().build()).range(Features.Decorators.FULL_RANGE).rarity(6));
         });
     }
 
