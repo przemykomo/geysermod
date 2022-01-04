@@ -1,30 +1,23 @@
 modLoader="javafml"
-loaderVersion="[37,)"
-license="LGPLv3"
+loaderVersion="[38,)"
+license="GNU LGPLv3"
 [[mods]]
 modId="geysermod"
-version="1.0.2.0"
+version="${file.jarVersion}"
 displayName="Geyser Mod"
 authors="SappyInsane"
 description='''
 Adds geysers.
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.geysermod]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[37,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+[[dependencies.geysermod]]
+    modId="forge"
+    mandatory=true
+    versionRange="[38,)"
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
-# Here's another dependency
 [[dependencies.geysermod]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.17.1,1.18)"
+    versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"
