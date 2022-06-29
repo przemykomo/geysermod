@@ -2,14 +2,11 @@ package xyz.przemyk.geysermod.worldgen;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraftforge.common.Tags;
-
-import java.util.Random;
 
 public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
 
@@ -19,7 +16,7 @@ public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
 
     public boolean place(FeaturePlaceContext<RandomPatchConfiguration> p_160210_) {
         RandomPatchConfiguration randompatchconfiguration = p_160210_.config();
-        Random random = p_160210_.random();
+        RandomSource random = p_160210_.random();
         BlockPos blockpos = p_160210_.origin();
         WorldGenLevel worldgenlevel = p_160210_.level();
         int i = 0;
@@ -35,6 +32,7 @@ public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
                 if (randompatchconfiguration.feature().get().place(worldgenlevel, p_160210_.chunkGenerator(), random, blockpos$mutableblockpos)) {
                     ++i;
                     System.out.println(blockpos$mutableblockpos);
+                    break;
                 }
 //            }
         }

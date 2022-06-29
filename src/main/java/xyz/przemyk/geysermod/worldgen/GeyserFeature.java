@@ -2,6 +2,7 @@ package xyz.przemyk.geysermod.worldgen;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -9,8 +10,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import xyz.przemyk.geysermod.Registration;
-
-import java.util.Random;
 
 public class GeyserFeature extends Feature<NoneFeatureConfiguration> {
 
@@ -20,7 +19,7 @@ public class GeyserFeature extends Feature<NoneFeatureConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> ctx) {
-        Random rand = ctx.random();
+        RandomSource rand = ctx.random();
         WorldGenLevel worldIn = ctx.level();
         BlockPos pos = ctx.origin();
         if (rand.nextInt(10) > 7) {
