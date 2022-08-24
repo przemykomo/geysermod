@@ -7,8 +7,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -18,6 +20,8 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -74,6 +78,16 @@ public class Registration {
         FEATURES.register(eventBus);
         CONFIGURED_FEATURES.register(eventBus);
         PLACED_FEATURES.register(eventBus);
-        System.out.println("Registration#init amogus");
+        MinecraftForge.EVENT_BUS.addListener(Registration::addFeatures);
+    }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private static void addFeatures(BiomeLoadingEvent event) {
+        Biome.BiomeCategory category = event.getCategory();
+        if (category == Biome.BiomeCategory.MOUNTAIN) {
+            event.getGeneration().addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PLACED_GEYSER_FEATURE.getHolder().get());
+        } else if (category == Biome.BiomeCategory.NETHER) {
+            event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, PLACED_NETHER_GEYSER_FEATURE.getHolder().get());
+        }
     }
 }

@@ -16,7 +16,6 @@ public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
     }
 
     public boolean place(FeaturePlaceContext<RandomPatchConfiguration> p_160210_) {
-        System.out.println("NetherGeyserFeature#place amogus");
         RandomPatchConfiguration randompatchconfiguration = p_160210_.config();
         Random random = p_160210_.random();
         BlockPos blockpos = p_160210_.origin();
@@ -31,9 +30,8 @@ public class NetherGeyserFeature extends Feature<RandomPatchConfiguration> {
 //            BlockPos blockpos2 = blockpos$mutableblockpos.below();
 //            BlockState blockstate1 = worldgenlevel.getBlockState(blockpos2);
 //            if (blockstate1.is(Tags.Blocks.NETHERRACK)) {
-                if (randompatchconfiguration.feature().value().place(worldgenlevel, p_160210_.chunkGenerator(), random, blockpos$mutableblockpos)) {
+                if (randompatchconfiguration.feature().value().place(worldgenlevel, p_160210_.chunkGenerator(), random, blockpos$mutableblockpos.below())) {
                     ++i;
-                    System.out.println(blockpos$mutableblockpos);
                 }
 //            }
         }
