@@ -1,23 +1,22 @@
 package xyz.przemyk.geysermod.blocks;
 
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 
 public interface INetherGeyser {
 
-    default void shoot(ServerLevel worldIn, BlockPos pos, AABB hurtEntitiesAABB) {
+    default void shoot(ServerLevel level, BlockPos pos, AABB hurtEntitiesAABB) {
         BlockPos blockpos = pos.above();
-        worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.8F);
-        worldIn.sendParticles(ParticleTypes.LAVA, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.25D, (double)blockpos.getZ() + 0.5D, 200, 0.1D, 3.0D, 0.1D, 0.0D);
+        level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);
+        level.sendParticles(ParticleTypes.LAVA, (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.25D, (double)blockpos.getZ() + 0.5D, 200, 0.1D, 3.0D, 0.1D, 0.0D);
 
-        for (LivingEntity entity : worldIn.getEntitiesOfClass(LivingEntity.class, hurtEntitiesAABB.move(blockpos))) {
-            entity.hurt(DamageSource.LAVA, 10.0f);
+        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, hurtEntitiesAABB.move(blockpos))) {
+            entity.hurt(level.damageSources().lava(), 10.0f);
         }
     }
 }
