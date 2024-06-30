@@ -15,7 +15,7 @@ public class RedstoneGeyserBlock extends Block implements IGeyser {
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 
     public RedstoneGeyserBlock() {
-        super(Properties.copy(Blocks.STONE));
+        super(Properties.ofFullCopy(Blocks.STONE));
         registerDefaultState(stateDefinition.any().setValue(TRIGGERED, false));
     }
 
@@ -26,7 +26,6 @@ public class RedstoneGeyserBlock extends Block implements IGeyser {
         builder.add(TRIGGERED);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         boolean powered = worldIn.hasNeighborSignal(pos);

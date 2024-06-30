@@ -11,12 +11,11 @@ import net.minecraft.world.phys.AABB;
 public class GeyserBlock extends Block implements IGeyser {
 
     public GeyserBlock() {
-        super(Properties.copy(Blocks.STONE).randomTicks());
+        super(Properties.ofFullCopy(Blocks.STONE).randomTicks());
     }
 
     protected AABB hurtEntitiesAABB = new AABB(0, 0, 0, 1, 3, 1);
 
-    @SuppressWarnings("deprecation")
     @Override
     public void randomTick(BlockState blockState, ServerLevel level, BlockPos blockPos, RandomSource randomSource) {
         shoot(level, blockPos, hurtEntitiesAABB);

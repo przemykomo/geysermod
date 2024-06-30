@@ -4,5 +4,5 @@
     "block.geysermod.redstone_geyser": "Redstone Geyser",
     "block.geysermod.redstone_nether_geyser": "Redstone Nether Geyser",
 
-    "itemGroup.geysermod": "Geyser Mod"
+    "geysermod.geyser_tab": "Geyser Mod"
 }

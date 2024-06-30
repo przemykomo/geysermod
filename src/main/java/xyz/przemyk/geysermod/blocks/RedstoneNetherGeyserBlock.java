@@ -15,7 +15,7 @@ public class RedstoneNetherGeyserBlock extends Block implements INetherGeyser {
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 
     public RedstoneNetherGeyserBlock() {
-        super(Properties.copy(Blocks.NETHERRACK));
+        super(Properties.ofFullCopy(Blocks.NETHERRACK));
         registerDefaultState(stateDefinition.any().setValue(TRIGGERED, false));
     }
 
@@ -26,7 +26,6 @@ public class RedstoneNetherGeyserBlock extends Block implements INetherGeyser {
         builder.add(TRIGGERED);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         boolean powered = worldIn.hasNeighborSignal(pos);
