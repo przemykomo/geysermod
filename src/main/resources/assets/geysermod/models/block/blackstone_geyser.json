@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "geysermod:block/blackstone_geyser_side",
+        "down": "geysermod:block/blackstone_geyser_side",
+        "up": "geysermod:block/blackstone_geyser_top",
+        "north": "geysermod:block/blackstone_geyser_side",
+        "east": "geysermod:block/blackstone_geyser_side",
+        "south": "geysermod:block/blackstone_geyser_side",
+        "west": "geysermod:block/blackstone_geyser_side"
+    }
+}
