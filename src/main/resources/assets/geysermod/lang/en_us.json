@@ -1,6 +1,6 @@
 {
-    "block.geysermod.geyser": "Geyser",
-    "block.geysermod.nether_geyser": "Nether Geyser",
+    "block.geysermod.stone_geyser": "Stone Geyser",
+    "block.geysermod.blackstone_geyser": "Blackstone Geyser",
     "block.geysermod.redstone_geyser": "Redstone Geyser",
     "block.geysermod.redstone_nether_geyser": "Redstone Nether Geyser",
 

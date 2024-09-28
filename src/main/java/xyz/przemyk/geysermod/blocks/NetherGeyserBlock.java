@@ -7,8 +7,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import xyz.przemyk.geysermod.GeyserMod;
 
-public class NetherGeyserBlock extends Block implements INetherGeyser {
+public class NetherGeyserBlock extends Block {
 
     public NetherGeyserBlock() {
         super(Properties.ofFullCopy(Blocks.NETHERRACK).randomTicks());
@@ -18,6 +19,6 @@ public class NetherGeyserBlock extends Block implements INetherGeyser {
 
     @Override
     public void randomTick(BlockState blockState, ServerLevel level, BlockPos blockPos, RandomSource randomSource) {
-        shoot(level, blockPos, hurtEntitiesAABB);
+        GeyserMod.shootNether(level, blockPos, hurtEntitiesAABB);
     }
 }

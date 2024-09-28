@@ -10,8 +10,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.AABB;
+import xyz.przemyk.geysermod.GeyserMod;
 
-public class RedstoneGeyserBlock extends Block implements IGeyser {
+public class RedstoneGeyserBlock extends Block {
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
 
     public RedstoneGeyserBlock() {
@@ -32,7 +33,7 @@ public class RedstoneGeyserBlock extends Block implements IGeyser {
         boolean triggered = state.getValue(TRIGGERED);
 
         if (powered && !triggered) {
-            shoot((ServerLevel) worldIn, pos, hurtEntitiesAABB);
+            GeyserMod.shoot((ServerLevel) worldIn, pos, hurtEntitiesAABB);
             worldIn.setBlock(pos, state.setValue(TRIGGERED, true), 4);
         } else if (!powered && triggered) {
             worldIn.setBlock(pos, state.setValue(TRIGGERED, false), 4);
