@@ -1,6 +1,10 @@
 {
     "block.geysermod.stone_geyser": "Stone Geyser",
-    "block.geysermod.blackstone_geyser": "Blackstone Geyser",
+    "block.geysermod.hot_spring": "Hot Spring Geyser",
+    "block.geysermod.hydro_vent": "Hydrothermal Vent Geyser",
+    "block.geysermod.volcanic": "Volcanic Geyser",
+    "block.geysermod.gold_volcano": "Gold Volcano Geyser",
+
     "block.geysermod.redstone_geyser": "Redstone Geyser",
     "block.geysermod.redstone_nether_geyser": "Redstone Nether Geyser",
 

@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "geysermod:block/stone_geyser_side",
+        "down": "geysermod:block/stone_geyser_side",
+        "up": "geysermod:block/stone_geyser_top",
+        "north": "minecraft:block/tuff",
+        "east": "minecraft:block/tuff",
+        "south": "minecraft:block/tuff",
+        "west": "minecraft:block/tuff"
+    }
+}

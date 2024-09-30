@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "geysermod:block/stone_geyser" }
+    }
+}

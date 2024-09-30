@@ -1,0 +1,21 @@
+{
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:tuff"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:raw_iron"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:raw_copper"
+                }
+            ]
+        }
+    ]
+}
