@@ -5,15 +5,16 @@
             "entries": [
                 {
                     "type": "minecraft:item",
+                    "name": "minecraft:nether_gold_ore",
+                    "weight": 8
+                },
+                {
+                    "type": "minecraft:item",
                     "name": "minecraft:blackstone"
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:netherrack"
-                },
-                {
-                    "type": "minecraft:item",
-                    "name": "minecraft:gold_nugget"
                 }
             ]
         }

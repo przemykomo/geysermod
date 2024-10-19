@@ -1,12 +1,12 @@
 {
     "parent": "block/cube",
     "textures": {
-        "particle": "geysermod:block/blackstone_geyser_side",
-        "down": "geysermod:block/blackstone_geyser_side",
-        "up": "geysermod:block/blackstone_geyser_top",
-        "north": "minecraft:block/deepslate",
-        "east": "minecraft:block/deepslate",
-        "south": "minecraft:block/deepslate",
-        "west": "minecraft:block/deepslate"
+        "particle": "geysermod:block/deepslate_geyser_side",
+        "down": "geysermod:block/deepslate_geyser_side",
+        "up": "geysermod:block/deepslate_geyser_top",
+        "north": "geysermod:block/deepslate_geyser_side",
+        "east": "geysermod:block/deepslate_geyser_side",
+        "south": "geysermod:block/deepslate_geyser_side",
+        "west": "geysermod:block/deepslate_geyser_side"
     }
 }

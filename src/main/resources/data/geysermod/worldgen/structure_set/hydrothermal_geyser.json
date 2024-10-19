@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "geysermod:hydrothermal_geyser",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 228687039,
+    "frequency": 0.5,
+    "spacing": 10,
+    "separation": 2
+  }
+}

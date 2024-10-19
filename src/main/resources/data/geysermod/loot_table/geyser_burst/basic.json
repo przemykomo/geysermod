@@ -5,15 +5,18 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:sand"
+                    "name": "minecraft:sand",
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:calcite"
+                    "name": "minecraft:calcite",
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:raw_copper"
+                    "name": "minecraft:copper_ore",
+                    "weight": 5
                 }
             ]
         }

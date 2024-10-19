@@ -1,0 +1,15 @@
+{
+    "structures": [
+      {
+        "structure": "geysermod:regular_geyser",
+        "weight": 1
+      }
+    ],
+    "placement": {
+      "type": "minecraft:random_spread",
+      "salt": 117576928,
+      "spacing": 10,
+      "separation": 1
+    }
+  }
+  

@@ -5,15 +5,18 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:tuff"
+                    "name": "minecraft:tuff",
+                    "weight": 98
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:raw_iron"
+                    "name": "minecraft:iron_ore",
+                    "weight": 1
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:raw_copper"
+                    "name": "minecraft:copper_ore",
+                    "weight": 1
                 }
             ]
         }

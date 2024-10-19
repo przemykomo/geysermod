@@ -1,18 +1,21 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "X",
-        "#"
+        "S",
+        "P",
+        "B"
     ],
     "key": {
-        "#": {
-            "item": "minecraft:piston"
-        },
-        "X": [
-            {
-                "item": "geysermod:nether_geyser"
+        "key": {
+            "S": {
+                "item": "minecraft:blackstone"
+            },
+            "P": {
+                "item": "minecraft:piston"
+            },
+            "B": {
+                "item": "minecraft:lava_bucket"
             }
-        ]
     },
     "result": {
         "item": "geysermod:redstone_nether_geyser",

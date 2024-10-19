@@ -1,0 +1,15 @@
+{
+    "structures": [
+      {
+        "structure": "geysermod:spring_geyser",
+        "weight": 1
+      }
+    ],
+    "placement": {
+      "type": "minecraft:random_spread",
+      "salt": 127586941,
+      "spacing": 10,
+      "separation": 1
+    }
+  }
+  
