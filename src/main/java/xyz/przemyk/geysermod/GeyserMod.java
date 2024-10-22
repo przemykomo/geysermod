@@ -13,6 +13,7 @@ import net.neoforged.fml.common.Mod;
 import xyz.przemyk.geysermod.setup.GeyserBlockEntities;
 import xyz.przemyk.geysermod.setup.GeyserBlocks;
 import xyz.przemyk.geysermod.setup.GeyserItems;
+import xyz.przemyk.geysermod.setup.GeyserStructures;
 
 @SuppressWarnings("unused")
 @Mod(GeyserMod.MODID)
@@ -24,6 +25,7 @@ public class GeyserMod {
         GeyserBlocks.init(bus);
         GeyserItems.init(bus);
         GeyserBlockEntities.init(bus);
+        GeyserStructures.init(bus);
     }
 
     public static void shoot(ServerLevel level, BlockPos pos, AABB hurtEntitiesAABB) {

@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "geysermod:geyser",
   "biomes": "#geysermod:has_spring",
   "step": "fluid_springs",
   "spawn_overrides": {},
