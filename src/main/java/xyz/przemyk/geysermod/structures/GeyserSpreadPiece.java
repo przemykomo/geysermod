@@ -1,37 +1,42 @@
 package xyz.przemyk.geysermod.structures;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import xyz.przemyk.geysermod.setup.GeyserStructures;
 
 public class GeyserSpreadPiece extends StructurePiece {
 
+    private final BlockState spreadBlock;
+
     public GeyserSpreadPiece(
-        StructureTemplateManager pStructureTemplateManager,
         BoundingBox box,
-        BlockPos pTemplatePosition) {
+        BlockState spreadBlock) {
         super(GeyserStructures.GEYSER_SPREAD.get(), 0, box);
+        this.spreadBlock = spreadBlock;
     }
 
     public GeyserSpreadPiece(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag compoundTag) {
         super(GeyserStructures.GEYSER_SPREAD.get(), compoundTag);
+        spreadBlock = NbtUtils.readBlockState(structurePieceSerializationContext.registryAccess().registryOrThrow(Registries.BLOCK).asLookup(), compoundTag.getCompound("spreadBlock"));
     }
 
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext pContext, CompoundTag pTag) {
-
+        pTag.put("spreadBlock", NbtUtils.writeBlockState(spreadBlock));
     }
 
     @Override
@@ -55,12 +60,7 @@ public class GeyserSpreadPiece extends StructurePiece {
                         int k2 = pLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, i, j) - 1;
                         blockpos$mutableblockpos.set(i, k2, j);
                         if (Math.abs(k2 - this.boundingBox.minY()) <= 3 && this.canBlockBeReplaced(pLevel, blockpos$mutableblockpos)) {
-                            this.replaceBlock(pRandom, pLevel, blockpos$mutableblockpos);
-//                            if (this.properties.overgrown) {
-//                                this.maybeAddLeavesAbove(pRandom, pLevel, blockpos$mutableblockpos);
-//                            }
-//
-//                            this.addNetherrackDripColumn(pRandom, pLevel, blockpos$mutableblockpos.below());
+                            this.replaceBlock(pLevel, blockpos$mutableblockpos);
                         }
                     }
                 }
@@ -68,8 +68,8 @@ public class GeyserSpreadPiece extends StructurePiece {
         }
     }
 
-    private void replaceBlock(RandomSource random, WorldGenLevel level, BlockPos pos) {
-        level.setBlock(pos, Blocks.GOLD_BLOCK.defaultBlockState(), 3);
+    private void replaceBlock(WorldGenLevel level, BlockPos pos) {
+        level.setBlock(pos, spreadBlock, 3);
     }
 
     private boolean canBlockBeReplaced(WorldGenLevel level, BlockPos pos) {

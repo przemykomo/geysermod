@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
@@ -47,7 +48,8 @@ public class GeyserStructure extends Structure {
                     DimensionPadding.CODEC
                         .optionalFieldOf("dimension_padding", DEFAULT_DIMENSION_PADDING)
                         .forGetter(structure -> structure.dimensionPadding),
-                    LiquidSettings.CODEC.optionalFieldOf("liquid_settings", DEFAULT_LIQUID_SETTINGS).forGetter(structure -> structure.liquidSettings)
+                    LiquidSettings.CODEC.optionalFieldOf("liquid_settings", DEFAULT_LIQUID_SETTINGS).forGetter(structure -> structure.liquidSettings),
+                    BlockState.CODEC.optionalFieldOf("spread_block").forGetter(structure -> structure.spreadBlock)
                 )
                 .apply(structureInstance, GeyserStructure::new)
         )
@@ -62,6 +64,7 @@ public class GeyserStructure extends Structure {
     private final List<PoolAliasBinding> poolAliases;
     private final DimensionPadding dimensionPadding;
     private final LiquidSettings liquidSettings;
+    private final Optional<BlockState> spreadBlock;
 
     private static DataResult<GeyserStructure> verifyRange(GeyserStructure p_286886_) {
         int i = switch (p_286886_.terrainAdaptation()) {
@@ -84,7 +87,8 @@ public class GeyserStructure extends Structure {
         int maxDistanceFromCenter,
         List<PoolAliasBinding> poolAliases,
         DimensionPadding dimensionPadding,
-        LiquidSettings liquidSettings
+        LiquidSettings liquidSettings,
+        Optional<BlockState> spreadBlock
     ) {
         super(structureSettings);
         this.startPool = startPool;
@@ -97,47 +101,7 @@ public class GeyserStructure extends Structure {
         this.poolAliases = poolAliases;
         this.dimensionPadding = dimensionPadding;
         this.liquidSettings = liquidSettings;
-    }
-
-    public GeyserStructure(
-        Structure.StructureSettings pSettings,
-        Holder<StructureTemplatePool> pStartPool,
-        int pMaxDepth,
-        HeightProvider pStartHeight,
-        boolean pUseExpansionHack,
-        Heightmap.Types pProjectStartToHeightmap
-    ) {
-        this(
-            pSettings,
-            pStartPool,
-            Optional.empty(),
-            pMaxDepth,
-            pStartHeight,
-            pUseExpansionHack,
-            Optional.of(pProjectStartToHeightmap),
-            80,
-            List.of(),
-            DEFAULT_DIMENSION_PADDING,
-            DEFAULT_LIQUID_SETTINGS
-        );
-    }
-
-    public GeyserStructure(
-        Structure.StructureSettings pSettings, Holder<StructureTemplatePool> pStartPool, int pMaxDepth, HeightProvider pStartHeight, boolean pUseExpansionHack
-    ) {
-        this(
-            pSettings,
-            pStartPool,
-            Optional.empty(),
-            pMaxDepth,
-            pStartHeight,
-            pUseExpansionHack,
-            Optional.empty(),
-            80,
-            List.of(),
-            DEFAULT_DIMENSION_PADDING,
-            DEFAULT_LIQUID_SETTINGS
-        );
+        this.spreadBlock = spreadBlock;
     }
 
     @Override
@@ -161,13 +125,14 @@ public class GeyserStructure extends Structure {
 
         return opt.map(generationStub -> {
             StructurePiecesBuilder builder = generationStub.getPiecesBuilder();
-            builder.addPiece(
-                new GeyserSpreadPiece(
-                    pContext.structureTemplateManager(),
-                    builder.getBoundingBox(),
-                    blockpos
-                )
-            );
+            spreadBlock.ifPresent(block -> {
+                builder.addPiece(
+                    new GeyserSpreadPiece(
+                        builder.getBoundingBox(),
+                        block
+                    )
+                );
+            });
             return new GenerationStub(generationStub.position(), Either.right(builder));
         });
     }
