@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
@@ -31,9 +32,6 @@ import java.util.Optional;
 public class GeyserStructure extends Structure {
     public static final DimensionPadding DEFAULT_DIMENSION_PADDING = DimensionPadding.ZERO;
     public static final LiquidSettings DEFAULT_LIQUID_SETTINGS = LiquidSettings.APPLY_WATERLOGGING;
-    public static final int MAX_TOTAL_STRUCTURE_RANGE = 128;
-    public static final int MIN_DEPTH = 0;
-    public static final int MAX_DEPTH = 20;
     public static final MapCodec<GeyserStructure> CODEC = RecordCodecBuilder.<GeyserStructure>mapCodec(
             structureInstance -> structureInstance.group(
                     settingsCodec(structureInstance),
@@ -104,13 +102,23 @@ public class GeyserStructure extends Structure {
         this.spreadBlock = spreadBlock;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public Optional<Structure.GenerationStub> findGenerationPoint(Structure.GenerationContext pContext) {
-        ChunkPos chunkpos = pContext.chunkPos();
-        int i = this.startHeight.sample(pContext.random(), new WorldGenerationContext(pContext.chunkGenerator(), pContext.heightAccessor()));
-        BlockPos blockpos = new BlockPos(chunkpos.getMinBlockX(), i, chunkpos.getMinBlockZ());
+    public Optional<Structure.GenerationStub> findGenerationPoint(Structure.GenerationContext context) {
+        ChunkPos chunkpos = context.chunkPos();
+        int x = chunkpos.getMinBlockX();
+        int z = chunkpos.getMinBlockZ();
+        int relY = this.startHeight.sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
+        BlockPos blockpos = new BlockPos(x, relY, z);
+        int landY = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+        BlockState blockState = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState()).getBlock(landY);
+
+        if (!blockState.getFluidState().isEmpty()) {
+            return Optional.empty();
+        }
+
         Optional<Structure.GenerationStub> opt = JigsawPlacement.addPieces(
-            pContext,
+            context,
             this.startPool,
             this.startJigsawName,
             this.maxDepth,
@@ -118,21 +126,22 @@ public class GeyserStructure extends Structure {
             this.useExpansionHack,
             this.projectStartToHeightmap,
             this.maxDistanceFromCenter,
-            PoolAliasLookup.create(this.poolAliases, blockpos, pContext.seed()),
+            PoolAliasLookup.create(this.poolAliases, blockpos, context.seed()),
             this.dimensionPadding,
             this.liquidSettings
         );
 
         return opt.map(generationStub -> {
             StructurePiecesBuilder builder = generationStub.getPiecesBuilder();
-            spreadBlock.ifPresent(block -> {
+            BoundingBox boundingBox = builder.getBoundingBox();
+            builder.offsetPiecesVertically(-4);
+            spreadBlock.ifPresent(block ->
                 builder.addPiece(
-                    new GeyserSpreadPiece(
-                        builder.getBoundingBox(),
-                        block
-                    )
-                );
-            });
+                new GeyserSpreadPiece(
+                    boundingBox,
+                    block
+                )
+            ));
             return new GenerationStub(generationStub.position(), Either.right(builder));
         });
     }

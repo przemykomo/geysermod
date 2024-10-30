@@ -73,6 +73,10 @@ public class GeyserSpreadPiece extends StructurePiece {
     }
 
     private boolean canBlockBeReplaced(WorldGenLevel level, BlockPos pos) {
-        return !level.getBlockState(pos).is(BlockTags.FEATURES_CANNOT_REPLACE);
+        BlockState blockState = level.getBlockState(pos);
+        return !blockState.is(BlockTags.FEATURES_CANNOT_REPLACE)
+            && blockState.getFluidState().isEmpty()
+            && !blockState.is(Blocks.AIR)
+            && !blockState.is(Blocks.OBSIDIAN);
     }
 }
