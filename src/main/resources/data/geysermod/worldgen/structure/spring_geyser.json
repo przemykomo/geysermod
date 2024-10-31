@@ -14,5 +14,6 @@
   "use_expansion_hack": false,
   "spread_block": {
     "Name": "minecraft:stone"
-  }
+  },
+  "vertical_offset": -5
 }

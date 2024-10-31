@@ -47,7 +47,8 @@ public class GeyserStructure extends Structure {
                         .optionalFieldOf("dimension_padding", DEFAULT_DIMENSION_PADDING)
                         .forGetter(structure -> structure.dimensionPadding),
                     LiquidSettings.CODEC.optionalFieldOf("liquid_settings", DEFAULT_LIQUID_SETTINGS).forGetter(structure -> structure.liquidSettings),
-                    BlockState.CODEC.optionalFieldOf("spread_block").forGetter(structure -> structure.spreadBlock)
+                    BlockState.CODEC.optionalFieldOf("spread_block").forGetter(structure -> structure.spreadBlock),
+                    Codec.intRange(-20, 20).fieldOf("vertical_offset").forGetter(structure -> structure.verticalOffset)
                 )
                 .apply(structureInstance, GeyserStructure::new)
         )
@@ -63,6 +64,7 @@ public class GeyserStructure extends Structure {
     private final DimensionPadding dimensionPadding;
     private final LiquidSettings liquidSettings;
     private final Optional<BlockState> spreadBlock;
+    private final int verticalOffset;
 
     private static DataResult<GeyserStructure> verifyRange(GeyserStructure p_286886_) {
         int i = switch (p_286886_.terrainAdaptation()) {
@@ -86,7 +88,8 @@ public class GeyserStructure extends Structure {
         List<PoolAliasBinding> poolAliases,
         DimensionPadding dimensionPadding,
         LiquidSettings liquidSettings,
-        Optional<BlockState> spreadBlock
+        Optional<BlockState> spreadBlock,
+        int verticalOffset
     ) {
         super(structureSettings);
         this.startPool = startPool;
@@ -100,6 +103,7 @@ public class GeyserStructure extends Structure {
         this.dimensionPadding = dimensionPadding;
         this.liquidSettings = liquidSettings;
         this.spreadBlock = spreadBlock;
+        this.verticalOffset = verticalOffset;
     }
 
     @SuppressWarnings("deprecation")
@@ -134,7 +138,7 @@ public class GeyserStructure extends Structure {
         return opt.map(generationStub -> {
             StructurePiecesBuilder builder = generationStub.getPiecesBuilder();
             BoundingBox boundingBox = builder.getBoundingBox();
-            builder.offsetPiecesVertically(-4);
+            builder.offsetPiecesVertically(verticalOffset);
             spreadBlock.ifPresent(block ->
                 builder.addPiece(
                 new GeyserSpreadPiece(
