@@ -15,7 +15,7 @@
       "absolute": 33
     }
   },
-  "max_distance_from_center": 80,
+  "max_distance_from_center": 24,
   "use_expansion_hack": false,
   "spread_block": {
     "Name": "minecraft:blackstone"
