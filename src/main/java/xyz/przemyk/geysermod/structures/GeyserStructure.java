@@ -140,7 +140,7 @@ public class GeyserStructure extends Structure {
             BoundingBox boundingBox = builder.getBoundingBox();
             builder.offsetPiecesVertically(verticalOffset);
             spreadBlock.ifPresent(block ->
-                builder.addPiece(
+                builder.pieces.addFirst(
                 new GeyserSpreadPiece(
                     boundingBox,
                     block

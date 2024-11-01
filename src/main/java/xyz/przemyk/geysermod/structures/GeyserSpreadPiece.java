@@ -1,12 +1,14 @@
 package xyz.przemyk.geysermod.structures;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -60,7 +62,8 @@ public class GeyserSpreadPiece extends StructurePiece {
                         int k2 = pLevel.getHeight(Heightmap.Types.WORLD_SURFACE_WG, i, j) - 1;
                         blockpos$mutableblockpos.set(i, k2, j);
                         if (Math.abs(k2 - this.boundingBox.minY()) <= 3 && this.canBlockBeReplaced(pLevel, blockpos$mutableblockpos)) {
-                            this.replaceBlock(pLevel, blockpos$mutableblockpos);
+                            replaceBlock(pLevel, blockpos$mutableblockpos);
+                            addDripColumns(pRandom, pLevel, blockpos$mutableblockpos.below());
                         }
                     }
                 }
@@ -68,8 +71,20 @@ public class GeyserSpreadPiece extends StructurePiece {
         }
     }
 
-    private void replaceBlock(WorldGenLevel level, BlockPos pos) {
+    private void replaceBlock(LevelAccessor level, BlockPos pos) {
         level.setBlock(pos, spreadBlock, 3);
+    }
+
+    private void addDripColumns(RandomSource pRandom, LevelAccessor pLevel, BlockPos pPos) {
+        BlockPos.MutableBlockPos pos = pPos.mutable();
+        replaceBlock(pLevel, pos);
+        int i = 8;
+
+        while (i > 0 && pRandom.nextFloat() < 0.5F) {
+            pos.move(Direction.DOWN);
+            i--;
+            replaceBlock(pLevel, pos);
+        }
     }
 
     private boolean canBlockBeReplaced(WorldGenLevel level, BlockPos pos) {
