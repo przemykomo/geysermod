@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "geysermod:geyser",
   "biomes": "#geysermod:has_gold_volcano",
   "step": "fluid_springs",
   "spawn_overrides": {},
@@ -12,9 +12,13 @@
       "absolute": 32
     },
     "max_inclusive": {
-      "absolute": 40
+      "absolute": 33
     }
   },
   "max_distance_from_center": 80,
-  "use_expansion_hack": false
+  "use_expansion_hack": false,
+  "spread_block": {
+    "Name": "minecraft:blackstone"
+  },
+  "vertical_offset": -2
 }
