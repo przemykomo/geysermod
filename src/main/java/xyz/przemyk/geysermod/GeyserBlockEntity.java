@@ -82,7 +82,7 @@ public class GeyserBlockEntity extends BlockEntity {
 
                 double halfDeviation = burstHeight / 2.0 / Math.sqrt(3);
 
-                ((ServerLevel) level).sendParticles(block.lava ? ParticleTypes.FLAME : ParticleTypes.SPLASH,
+                ((ServerLevel) level).sendParticles(block.lava ? ParticleTypes.LAVA : ParticleTypes.SPLASH,
                     (double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.25D + halfDeviation, (double)blockpos.getZ() + 0.5D, burstHeight + 2,
                     0.1D, halfDeviation, 0.1D, 0.0D);
 

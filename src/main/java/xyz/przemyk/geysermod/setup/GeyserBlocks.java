@@ -18,6 +18,7 @@ public class GeyserBlocks {
         BLOCKS.register(bus);
     }
 
+    //Could you please document which parameter here is which, in this comment? I want to make sure. I know the last one is wether to deal fire damage.
     public static final DeferredHolder<Block, GeyserBlock> STONE_GEYSER = BLOCKS.register("stone_geyser", () ->
         new GeyserBlock(6 * 60 * 20, 10 * 20, 14 * 20, 10, 14, "geyser_burst/basic", false));
 
@@ -25,7 +26,7 @@ public class GeyserBlocks {
         new GeyserBlock(90 * 20, 50 * 20, 70 * 20, 1, 3, "geyser_burst/hot_spring", false));
 
     public static final DeferredHolder<Block, GeyserBlock> HYDROTHERMAL_VENT_GEYSER = BLOCKS.register("hydro_vent", () ->
-        new GeyserBlock(65 * 20, 50 * 20, 60 * 20, 2, 6, "geyser_burst/hydro_vent", false));
+        new GeyserBlock(65 * 20, 50 * 20, 60 * 20, 2, 6, "geyser_burst/hydro_vent", true));
 
     public static final DeferredHolder<Block, GeyserBlock> VOLCANIC_GEYSER = BLOCKS.register("volcanic", () ->
         new GeyserBlock(9 * 60 * 20, 18 * 20, 22 * 20, 2, 6, "geyser_burst/volcanic", true));
