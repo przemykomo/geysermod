@@ -1,22 +1,22 @@
 {
     "pools": [
         {
-            "rolls": 1,
+            "rolls": 4,
             "entries": [
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:deepslate",
-                    "weight": 90
+                    "weight": 124
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:deepslate_iron_ore",
-                    "weight": 8
+                    "weight": 3
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:deepslate_diamond_ore",
-                    "weight": 2
+                    "weight": 1
                 }
             ]
         }
