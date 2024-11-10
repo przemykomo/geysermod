@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "geysermod:block/sandy_geyser_side",
+        "down": "geysermod:block/sandy_geyser_side",
+        "up": "geysermod:block/sandy_geyser_top",
+        "north": "geysermod:block/sandy_geyser_side",
+        "east": "geysermod:block/sandy_geyser_side",
+        "south": "geysermod:block/sandy_geyser_side",
+        "west": "geysermod:block/sandy_geyser_side"
+    }
+}
